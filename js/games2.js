@@ -1,5 +1,4 @@
 
-
 const canvas = document.getElementById('canvas2');
 const ctx = canvas.getContext('2d');
 
@@ -7,8 +6,6 @@ const ctx = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 768;
 
-
-// Make sure the image is loaded first otherwise nothing will draw.
 
 let background = false;
 let backgroundImage = new Image();
@@ -34,6 +31,14 @@ let max = {
   };  
 
 
+
+
+
+
+
+
+
+
 // Handle keyboard controls
 let keysDown = {};
 // Check for keys pressed where key represents the keycode captured
@@ -46,7 +51,7 @@ addEventListener("keyup", function (key) {
 
 
   // Controls
-let update = function (modifier) {
+function update(modifier) {
     if (38 in keysDown) { 
       max.y -= max.speed * modifier;
       if (max.y < 0) {
@@ -55,8 +60,8 @@ let update = function (modifier) {
     }
     if (40 in keysDown) { 
       max.y += max.speed * modifier;
-      if (max.y >= 690) {
-        max.y = 690;
+      if (max.y >= 660) {
+        max.y = 660;
         }
     }
     if (37 in keysDown) { 
@@ -67,10 +72,53 @@ let update = function (modifier) {
     }
     if (39 in keysDown) { 
       max.x += max.speed * modifier;
-      if (max.x >= 980) {
-        max.x = (canvas.width-max.x);
+      if (max.x >= 960) {
+        max.x = 960;
+
         }
     }
+}
+
+
+//bones
+let boneicon = new Image();
+boneicon.src = "./pics/Bone.png"
+
+let noOfBones = 5;
+
+let bone = []
+
+for (let i = 0; i< noOfBones; i++){
+
+    let x = Math.floor(Math.random() * canvas.width);
+    let y = Math.floor(Math.random() * canvas.height);
+
+    bone[i] = new Bones(x,y);
+
+}
+
+
+function Bones(x, y){
+
+this.x = x;
+this.y = y;
+
+
+this.fall = function (){
+
+this.y = this.y+1;
+
+if (this.y > canvas.height){
+    this.y =0;
+}
+
+}
+
+this.show = function(){
+ctx.drawImage(boneicon, this.x, this.y, 108, 108);
+
+}
+
 }
 
 
@@ -79,25 +127,37 @@ let update = function (modifier) {
 
 
 
-  var draw = function () {
-    if (background) {
+function draw() {
+
+   if (background) {
       ctx.drawImage(backgroundImage, 0, 0);
     }
     if (maxDraw) {
       ctx.drawImage(maxImage, max.x, max.y, 60, 120);
+
+      for (let i =0; i<noOfBones; i++){
+
+        bone[i].show();
+        bone[i].fall();
+
+
+      }
+
+
+
     }
     
     };  
 
 
 
-  let main = function () {
+function updategame(){
     update(0.02);
     draw();
-    requestAnimationFrame(main);
-  };
+    requestAnimationFrame(updategame);
+};
   
-  main();
+updategame();
 
 
 
