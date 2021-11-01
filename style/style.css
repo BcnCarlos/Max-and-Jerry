@@ -1,0 +1,89 @@
+body {
+    margin: 30px;
+    padding: 0px;
+    size: 10px;
+    font-weight: 300;
+    line-height: 1.5em;
+    background-color: #f0a3bc;
+}
+  
+
+  
+h1 {
+      size: 9em;
+      text-align: center;
+      transform: uppercase;
+      font-family: fantasy;
+      color:#9b45b2;
+      font-weight: bold;
+}
+  
+
+h3 {
+    /* text-align: center; */
+    transform: uppercase;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace ;
+    color: #397754;
+}    
+
+h2 {
+  /* text-align: center; */
+  transform: uppercase;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace ;
+  color: red;
+}  
+
+h4 {
+  /* text-align: center; */
+  transform: uppercase;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace ;
+  color: #397754;
+}
+
+
+img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  border-radius: 20px;
+  float: left;
+  margin-right: 20px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+
+button {
+  background-clip: padding-box;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  font-size: 20px;
+  font-family: 'Courier New', Courier, monospace ;
+  pointer-events: auto;
+  text-decoration: none;
+}
+
+a{
+  text-decoration: none; 
+}
+
+
+#canvas1 {
+  position: absolute;
+  top:0;
+  left:0;
+  width: 1024px;
+  height: 768px;
+}
+
