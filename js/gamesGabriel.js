@@ -95,9 +95,7 @@ for (let i = 0; i< noOfBones; i++){
     let y = Math.floor(Math.random() * canvas.height);
 
     bone[i] = new Bones(x,y);
-
 }
-
 
 // Let the Bones fall! 
 
@@ -107,13 +105,15 @@ this.x = x;
 this.y = y;
 this.width = 108;
 this.height = 108;
+//this.opacity = 0;
+
 
     this.fall = function (){
     
         this.y = this.y+1;
     
         if (this.y > canvas.height) {
-        this.y =0; 
+            this.y =0; 
         }
 
     }
@@ -131,51 +131,6 @@ this.height = 108;
 
 
 
-// Let the Balls  fall! 
-
-let ballicon = new Image()
-ballicon.src = "./pics/tennis-ball.png"
-
-let noOfBalls = 8
-
-let ball= []
-
-for (let i = 0; i< noOfBalls; i++){
-
-    let x = Math.floor(Math.random() * canvas.width);
-    let y = Math.floor(Math.random() * canvas.height);
-
-    ball[i] = new TennisBalls(x,y);
-
-}
-
-
-// What to do with the tennis balls
-
-function TennisBalls(x, y){
-
-    this.x = x;
-    this.y = y;
-    this.width = 108;
-    this.height = 108;
-    
-    
-    this.fall = function (){
-    
-    this.y = this.y+1;
-    
-    if (this.y > canvas.height){
-        this.y =0;
-    }
-    
-    }
-    
-    this.show = function(){
-    ctx.drawImage(ballicon, this.x, this.y, this.width, this.height);
-    
-    }
-    
-    }
 
 
 // Draw the game and check for collisions   
@@ -190,24 +145,20 @@ function draw() {
 
 
       ctx.drawImage(maxImage, max.x, max.y, max.width, max.height);
+      
+    }
 
 
-      for (let i =0; i<noOfBones; i++){
+    
+
+    for (let i =0; i<noOfBones; i++){
 
         bone[i].show();
         bone[i].fall();
 
-      }
-
-      for (let i= 0; i < noOfBalls; i++){
-
-        ball[i].show();
-        ball[i].fall();
-
-      }
-
     }
     
+
 
  //   console.log(`MAX X, ${max.x}, MAX Y, ${max.y}`) 
 
@@ -244,23 +195,39 @@ function draw() {
 
       //ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       //let index = 0 
-      
-
+      //bone.shift(0)
       
       console.log("CRASH")    
+
       
-      //bone[0].x = x
-      //bone[0].y = y
-      bone[0].width = 0
-      bone[0].height = 0
+      
+        bone[0].shift();
+        bone[0].y.shift();
+        bone[0].width.shift();
+        bone[0].height.shit();
+        //track++;
+
+    
+      
+      
+      
+      
+      //bone[0].opacity = 0;
+
+      //canvas.renderAll();
+
+      //ctx.clearRect(0,0,canvas.width ,canvas.height);
+
+
 
       //bone[0].show 
 
-      bone[0].width = 108
-      bone[0].height = 108   
+      //bone[0].width = 108
+      //bone[0].height = 108   
 
 
       //bone[0].fall
+      
 
 
       //ctx.clearRect(0,0,canvas.width ,canvas.height);
@@ -283,6 +250,9 @@ function draw() {
 function gameStart(){
   keyStrokes(0.02);
     draw();
+
+
+
     requestAnimationFrame(gameStart);
 };
   
