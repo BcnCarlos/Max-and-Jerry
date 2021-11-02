@@ -24,7 +24,7 @@ let maxImage = new Image();
     maxDraw = true;
   };
 
-  maxImage.src = "./pics/Max-head-round-96.png";
+  maxImage.src = "./pics/Jerry-head-round-96.png";
 
 let max = {
     speed: 400,
@@ -129,6 +129,51 @@ this.height = 108;
 
 }
 
+// Let the Balls  fall! 
+
+let ballicon = new Image()
+ballicon.src = "./pics/tennis-ball.png"
+
+let noOfBalls = 6
+
+let ball= []
+
+for (let i = 0; i< noOfBalls; i++){
+
+    let x = Math.floor(Math.random() * canvas.width);
+    let y = Math.floor(Math.random() * canvas.height);
+
+    ball[i] = new TennisBalls(x,y);
+
+}
+
+
+// What to do with the tennis balls
+
+function TennisBalls(x, y){
+
+    this.x = x;
+    this.y = y;
+    this.width = 108;
+    this.height = 108;
+    
+    
+    this.fall = function (){
+    
+    this.y = this.y+1;
+    
+    if (this.y > canvas.height){
+        this.y =0;
+    }
+    
+    }
+    
+    this.show = function(){
+    ctx.drawImage(ballicon, this.x, this.y, this.width, this.height);
+    
+    }
+    
+    }
 
 
 
@@ -156,87 +201,78 @@ function draw() {
         bone[i].show();
         bone[i].fall();
 
+
+        if ( (max.x && max.y) == (bone[i].x && bone[i].y) )
+        
+        {
+
+           
+            
+            console.log("CRASH");    
+      
+              bone[i].x = Math.random() * (canvas.width - bone[i].width);
+              bone[i].y = canvas.height;
+          
+          
+      
+          }
+
+
+
+
     }
-    
+
+    for (let i= 0; i < noOfBalls; i++){
+
+        ball[i].show();
+        ball[i].fall();
 
 
- //   console.log(`MAX X, ${max.x}, MAX Y, ${max.y}`) 
 
-   console.log(`MAX X, ${max.x}, MAX Y, ${max.y}`) 
+//identify the distances between the cat and the dog every 5 millisecond or every time the frame updates
+  dist = Math.sqrt((ball[i].x - max.x)*(ball[i].x - max.x) + (ball[i].y - max.y)*(ball[i].y - max.y));
 
-    console.log( `BONE 0 X, ${bone[0].x}, BONE 0 Y, ${bone[0].y}`)
-
-    console.log( `BONE 1 X, ${bone[1].x}, BONE 1 Y, ${bone[1].y}` )
-
-    console.log( `BONE 2 X, ${bone[2].x}, BONE 2 Y, ${bone[2].y}` )
-
-    console.log( `BONE 3 X, ${bone[3].x}, BONE 3 Y, ${bone[3].y}` )
-
-    /*
-    bone.forEach((b, index)=> {
+console.log(dist)
 
 
-      if ( (max.x && max.y) == (bone[0].x && bone[0].y)   ) {
+        /*
+        if ( max.x + max.width  >= ball[i].x + ball[i].width &&
+            
+            max.y + max.height > ball[i].y &&
 
-        bone.splice(index, 1)
+            max.y < ball[i].y + ball[i].height &&
+
+            max.x <= ball[i].x + ball[i].width &&
+
+            max.y + max.height > ball[i].y &&
+
+            max.y < ball[i].y + ball.height
+            
+            ) 
+
+            */
+
+
+
+        if(dist <= 50) 
+        {
+
+           
+            
+            console.log("CRASH");    
+      
+              ball[i].x = Math.random() * (canvas.width - ball[i].width);
+              ball[i].y = canvas.height;
+          
+          
+      
+          }
+
+
+
 
 
       }
-
-
-
-    })
-
-    */
-
-    if ( (max.x && max.y) == (bone[0].x && bone[0].y) ){
-
-      //ctx.clearRect(bone[0].x, bone[0].y, bone[0].x + bone[0].width , bone[0].y + bone[0].height );
-
-      //ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      //let index = 0 
-      //bone.shift(0)
-      
-      console.log("CRASH")    
-
-      
-      
-        bone[0].shift();
-        bone[0].y.shift();
-        bone[0].width.shift();
-        bone[0].height.shit();
-        //track++;
-
-    
-      
-      
-      
-      
-      //bone[0].opacity = 0;
-
-      //canvas.renderAll();
-
-      //ctx.clearRect(0,0,canvas.width ,canvas.height);
-
-
-
-      //bone[0].show 
-
-      //bone[0].width = 108
-      //bone[0].height = 108   
-
-
-      //bone[0].fall
-      
-
-
-      //ctx.clearRect(0,0,canvas.width ,canvas.height);
- 
-
-  
-
-    }
-
 
 
 
