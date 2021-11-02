@@ -23,4 +23,14 @@ body {
     background-color: grey;
 
   }
+
   
+  #canvas3 {
+    position: absolute;
+    top:0;
+    left:0;
+    width: 1024px;
+    height: 768px;
+    background-color: grey;
+
+  }

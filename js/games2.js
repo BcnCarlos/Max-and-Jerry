@@ -16,7 +16,6 @@ backgroundImage.src = "./pics/Barcelona-Tile.jpg";
 
 
 
-// Max 
 let maxDraw = false;
 let maxImage = new Image();
   maxImage.onload = function () {
@@ -29,12 +28,6 @@ let max = {
     x: 240,
     y: 380
   };  
-
-
-
-
-
-
 
 
 
@@ -77,14 +70,18 @@ function update(modifier) {
 
         }
     }
+
+    
+
 }
 
 
 //bones
+
 let boneicon = new Image();
 boneicon.src = "./pics/Bone.png"
 
-let noOfBones = 5;
+let noOfBones = 4;
 
 let bone = []
 
@@ -103,28 +100,67 @@ function Bones(x, y){
 this.x = x;
 this.y = y;
 
+    this.fall = function (){
+    
+        this.y = this.y+1;
+    
+        if (this.y > canvas.height) {
+        this.y =0; 
+        }
 
-this.fall = function (){
+    }
 
-this.y = this.y+1;
+    this.show = function(){
 
-if (this.y > canvas.height){
-    this.y =0;
+        ctx.drawImage(boneicon, this.x, this.y, 108, 108);
+    }
+    
+
 }
 
+
+
+// tennis balls 
+
+let ballicon = new Image()
+ballicon.src = "./pics/tennis-ball.png"
+
+let noOfBalls = 8
+
+let ball= []
+
+for (let i = 0; i< noOfBalls; i++){
+
+    let x = Math.floor(Math.random() * canvas.width);
+    let y = Math.floor(Math.random() * canvas.height);
+
+    ball[i] = new TennisBalls(x,y);
+
 }
 
-this.show = function(){
-ctx.drawImage(boneicon, this.x, this.y, 108, 108);
 
-}
+function TennisBalls(x, y){
 
-}
-
-
-
-
-
+    this.x = x;
+    this.y = y;
+    
+    
+    this.fall = function (){
+    
+    this.y = this.y+1;
+    
+    if (this.y > canvas.height){
+        this.y =0;
+    }
+    
+    }
+    
+    this.show = function(){
+    ctx.drawImage(ballicon, this.x, this.y, 108, 108);
+    
+    }
+    
+    }
 
 
 function draw() {
@@ -132,6 +168,7 @@ function draw() {
    if (background) {
       ctx.drawImage(backgroundImage, 0, 0);
     }
+
     if (maxDraw) {
       ctx.drawImage(maxImage, max.x, max.y, 60, 120);
 
@@ -139,12 +176,13 @@ function draw() {
 
         bone[i].show();
         bone[i].fall();
-
-
       }
 
+      for (let i= 0; i < noOfBalls; i++){
 
-
+        ball[i].show();
+        ball[i].fall();
+        }
     }
     
     };  
