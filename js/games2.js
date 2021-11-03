@@ -303,7 +303,7 @@ for (let i = 0; i <= max.countdown; i++)
 {
 
 max.countdown -= 1  
-console.log(`${max.countdown}`)
+//console.log(`${max.countdown}`)
   
 if (max.countdown === 0)
 
