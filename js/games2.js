@@ -34,6 +34,7 @@ let max = {
     height: 120,
     boneScore: 0,
     ballScore: 0,
+    countdown: 120000,
 
   };  
 
@@ -268,16 +269,54 @@ function draw() {
 
     
 
+// function timeoutRedirect() {
+
+//    location.replace = "./over.html";
+
+//}
+
+
+/*
+
+function gameover (){
+
+  // close window timeout 
+
+}
+*/
 
 
 
 function gameStart(){
-  keyStrokes(0.02);
+    keyStrokes(0.02);
     draw();
     requestAnimationFrame(gameStart);
 };
+
+gameStart(), 
+
+
+
+setInterval ( () => {
+
+for (let i = 0; i <= max.countdown; i++) 
+{
+
+max.countdown -= 1  
+console.log(`${max.countdown}`)
   
-gameStart();
+if (max.countdown === 0)
+
+{
+  window.location.assign("../over.html");
+  
+}
+
+}
+
+}, 1000);
+
+
 
 
 
