@@ -32,12 +32,13 @@ let max = {
     y: 380,
     width: 60,
     height: 120,
+    boneScore: 0,
+    ballScore: 0,
+
   };  
 
 
-
-
-// Keys movements  for Max 
+// Keys movements for Max 
 let keysDown = {};
 
 addEventListener("keydown", function (key) {
@@ -76,9 +77,7 @@ function keyStrokes(modifier) {
         }
     }
 
-
 }
-
 
 // Create bones objects 
 
@@ -122,13 +121,9 @@ this.height = 108;
 
         ctx.drawImage(boneicon, this.x, this.y, this.width, this.height)
 
-    }
-
-
-    
+    }    
 
 }
-
 
 
 // Let the Balls  fall! 
@@ -182,96 +177,92 @@ function TennisBalls(x, y){
 
 function draw() {
 
-   if (background) {
+
+
+// Draw Background
+
+  if (background) {
       ctx.drawImage(backgroundImage, 0, 0);
     }
 
+
+// Draw Max
+
     if (maxDraw) {
+
+      ctx.font = 'bold 48px Comic Sans MS';
+      ctx.fillStyle = "purple";
+      ctx.fillText(`Balls: ${max.ballScore}`, 40, 50);
+      ctx.fillText(`Bones: ${max.boneScore}`, 300, 50);
+
+
+
 
 
       ctx.drawImage(maxImage, max.x, max.y, max.width, max.height);
 
+
+// Draw the Bones and check for collisions 
 
       for (let i =0; i<noOfBones; i++){
 
         bone[i].show();
         bone[i].fall();
 
+
+// Check for collisions of the balls and Max and increment Scores     
+
+        dist = Math.sqrt((bone[i].x - max.x)*(bone[i].x - max.x) + (bone[i].y - max.y)*(bone[i].y - max.y));
+
+//console.log(dist)
+
+        if(dist <= 50) 
+        {  
+          
+          max.boneScore += 1
+          bone[i].x = Math.random() * (canvas.width - bone[i].width);
+          bone[i].y = canvas.height;
+
+
+          
+        }
+
+
       }
+
+
+// Draw the Balls and Check for collisions
 
       for (let i= 0; i < noOfBalls; i++){
 
         ball[i].show();
         ball[i].fall();
 
+ 
+// Check for collisions of the balls and Max         
+
+        dist = Math.sqrt((ball[i].x - max.x)*(ball[i].x - max.x) + (ball[i].y - max.y)*(ball[i].y - max.y));
+
+      //console.log(dist)
+
+        if(dist <= 50) 
+        {       
+
+          max.ballScore += 1
+          ball[i].x = Math.random() * (canvas.width - ball[i].width);
+          ball[i].y = canvas.height;
+                         
+        }
+
+        // console.log(`BALL Score, ${max.ballScore}` );
+        // console.log(`BONE Score, ${max.boneScore}` );    
+    
+
+
       }
 
     }
     
-
- //   console.log(`MAX X, ${max.x}, MAX Y, ${max.y}`) 
-
-   console.log(`MAX X, ${max.x}, MAX Y, ${max.y}`) 
-
-    console.log( `BONE 0 X, ${bone[0].x}, BONE 0 Y, ${bone[0].y}`)
-
-    console.log( `BONE 1 X, ${bone[1].x}, BONE 1 Y, ${bone[1].y}` )
-
-    console.log( `BONE 2 X, ${bone[2].x}, BONE 2 Y, ${bone[2].y}` )
-
-    console.log( `BONE 3 X, ${bone[3].x}, BONE 3 Y, ${bone[3].y}` )
-
-    /*
-    bone.forEach((b, index)=> {
-
-
-      if ( (max.x && max.y) == (bone[0].x && bone[0].y)   ) {
-
-        bone.splice(index, 1)
-
-
-      }
-
-
-
-    })
-
-    */
-
-    if ( (max.x && max.y) == (bone[0].x && bone[0].y) ){
-
-      //ctx.clearRect(bone[0].x, bone[0].y, bone[0].x + bone[0].width , bone[0].y + bone[0].height );
-
-      //ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      //let index = 0 
-      
-
-      
-      console.log("CRASH")    
-      
-      //bone[0].x = x
-      //bone[0].y = y
-      bone[0].width = 0
-      bone[0].height = 0
-
-      //bone[0].show 
-
-      bone[0].width = 108
-      bone[0].height = 108   
-
-
-      //bone[0].fall
-
-
-      //ctx.clearRect(0,0,canvas.width ,canvas.height);
- 
-
-  
-
-    }
-
-
-
 
     };  
 

@@ -229,7 +229,7 @@ function draw() {
 
 
 
-//identify the distances between the cat and the dog every 5 millisecond or every time the frame updates
+//identify the distances between dog and ball
   dist = Math.sqrt((ball[i].x - max.x)*(ball[i].x - max.x) + (ball[i].y - max.y)*(ball[i].y - max.y));
 
 console.log(dist)
