@@ -241,7 +241,7 @@ function draw() {
 
       if (dist <= 50) {
         max.ballScore += 1;
-        let audio = new Audio("../pics/Dog_Bark_Sound_Effect.mp3")
+        let audio = new Audio("./pics/Dog_Bark_Sound_Effect.mp3")
         audio.play();
         ball[i].x = Math.random() * (canvas.width - ball[i].width);
         ball[i].y = canvas.height;
