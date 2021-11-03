@@ -214,7 +214,6 @@ function draw() {
   }
 }
 
-
 function gameStart() {
   keyStrokes(0.02);
   draw();
@@ -223,5 +222,7 @@ function gameStart() {
 
 gameStart(),
   setInterval(() => {
-    window.location.assign("/over.html");
+    window.location.assign(
+      "https://bcncarlos.github.io/Max-and-Jerry-/over.html"
+    );
   }, max.countdown);
