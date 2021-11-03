@@ -1,11 +1,8 @@
-
-const canvas = document.getElementById('canvas2');
-const ctx = canvas.getContext('2d');
-
+const canvas = document.getElementById("canvas2");
+const ctx = canvas.getContext("2d");
 
 canvas.width = 1024;
 canvas.height = 768;
-
 
 let background = false;
 let backgroundImage = new Image();
@@ -14,320 +11,216 @@ backgroundImage.onload = function () {
 };
 backgroundImage.src = "./pics/Barcelona-Tile.jpg";
 
-
-// Configure Max 
+// Configure Max
 
 let maxDraw = false;
 
 let maxImage = new Image();
-  maxImage.onload = function () {
-    maxDraw = true;
-  };
+maxImage.onload = function () {
+  maxDraw = true;
+};
 
-  maxImage.src = "./pics/Max-head-round-96.png";
+maxImage.src = "./pics/Max-head-round-96.png";
 
 let max = {
-    speed: 400,
-    x: 240,
-    y: 380,
-    width: 60,
-    height: 120,
-    boneScore: 0,
-    ballScore: 0,
-    countdown: 120000,
+  speed: 400,
+  x: 240,
+  y: 380,
+  width: 60,
+  height: 120,
+  boneScore: 0,
+  ballScore: 0,
+  countdown: 10000,
+};
 
-  };  
-
-
-// Keys movements for Max 
+// Keys movements for Max
 let keysDown = {};
 
-addEventListener("keydown", function (key) {
-  keysDown[key.keyCode] = true;
-}, false);
-addEventListener("keyup", function (key) {
-  delete keysDown[key.keyCode];
-}, false);
+addEventListener(
+  "keydown",
+  function (key) {
+    keysDown[key.keyCode] = true;
+  },
+  false
+);
+addEventListener(
+  "keyup",
+  function (key) {
+    delete keysDown[key.keyCode];
+  },
+  false
+);
 
+// Keyboard Controls
 
-  // Controls
 function keyStrokes(modifier) {
-    if (38 in keysDown) { 
-      max.y -= max.speed * modifier;
-      if (max.y < 0) {
-        max.y = 0;
-        }
+  if (38 in keysDown) {
+    max.y -= max.speed * modifier;
+    if (max.y < 0) {
+      max.y = 0;
     }
-    if (40 in keysDown) { 
-      max.y += max.speed * modifier;
-      if (max.y >= 660) {
-        max.y = 660;
-        }
+  }
+  if (40 in keysDown) {
+    max.y += max.speed * modifier;
+    if (max.y >= 660) {
+      max.y = 660;
     }
-    if (37 in keysDown) { 
-      max.x -= max.speed * modifier;
-      if (max.x <= 0) {
-        max.x = 0;
-        }
+  }
+  if (37 in keysDown) {
+    max.x -= max.speed * modifier;
+    if (max.x <= 0) {
+      max.x = 0;
     }
-    if (39 in keysDown) { 
-      max.x += max.speed * modifier;
-      if (max.x >= 960) {
-        max.x = 960;
-
-        }
+  }
+  if (39 in keysDown) {
+    max.x += max.speed * modifier;
+    if (max.x >= 960) {
+      max.x = 960;
     }
-
+  }
 }
 
-// Create bones objects 
+// Create bones objects
 
 let boneicon = new Image();
-boneicon.src = "./pics/Bone.png"
+boneicon.src = "./pics/Bone.png";
 
 let noOfBones = 4;
 
-let bone = []
+let bone = [];
 
-for (let i = 0; i< noOfBones; i++){
+for (let i = 0; i < noOfBones; i++) {
+  let x = Math.floor(Math.random() * canvas.width);
+  let y = Math.floor(Math.random() * canvas.height);
 
-    let x = Math.floor(Math.random() * canvas.width);
-    let y = Math.floor(Math.random() * canvas.height);
-
-    bone[i] = new Bones(x,y);
-
+  bone[i] = new Bones(x, y);
 }
 
+// Let the Bones fall!
 
-// Let the Bones fall! 
+function Bones(x, y) {
+  this.x = x;
+  this.y = y;
+  this.width = 108;
+  this.height = 108;
 
-function Bones(x, y){
+  this.fall = function () {
+    this.y = this.y + 1;
 
-this.x = x;
-this.y = y;
-this.width = 108;
-this.height = 108;
-
-    this.fall = function (){
-    
-        this.y = this.y+1;
-    
-        if (this.y > canvas.height) {
-        this.y =0; 
-        }
-
+    if (this.y > canvas.height) {
+      this.y = 0;
     }
+  };
 
-    this.show = function(){
-
-        ctx.drawImage(boneicon, this.x, this.y, this.width, this.height)
-
-    }    
-
+  this.show = function () {
+    ctx.drawImage(boneicon, this.x, this.y, this.width, this.height);
+  };
 }
 
+// Let the Balls  fall!
 
-// Let the Balls  fall! 
+let ballicon = new Image();
+ballicon.src = "./pics/tennis-ball.png";
 
-let ballicon = new Image()
-ballicon.src = "./pics/tennis-ball.png"
+let noOfBalls = 8;
 
-let noOfBalls = 8
+let ball = [];
 
-let ball= []
+for (let i = 0; i < noOfBalls; i++) {
+  let x = Math.floor(Math.random() * canvas.width);
+  let y = Math.floor(Math.random() * canvas.height);
 
-for (let i = 0; i< noOfBalls; i++){
-
-    let x = Math.floor(Math.random() * canvas.width);
-    let y = Math.floor(Math.random() * canvas.height);
-
-    ball[i] = new TennisBalls(x,y);
-
+  ball[i] = new TennisBalls(x, y);
 }
-
 
 // What to do with the tennis balls
 
-function TennisBalls(x, y){
+function TennisBalls(x, y) {
+  this.x = x;
+  this.y = y;
+  this.width = 108;
+  this.height = 108;
 
-    this.x = x;
-    this.y = y;
-    this.width = 108;
-    this.height = 108;
-    
-    
-    this.fall = function (){
-    
-    this.y = this.y+1;
-    
-    if (this.y > canvas.height){
-        this.y =0;
+  this.fall = function () {
+    this.y = this.y + 1;
+
+    if (this.y > canvas.height) {
+      this.y = 0;
     }
-    
-    }
-    
-    this.show = function(){
+  };
+
+  this.show = function () {
     ctx.drawImage(ballicon, this.x, this.y, this.width, this.height);
-    
-    }
-    
-    }
+  };
+}
 
-
-// Draw the game and check for collisions   
+// Draw the game and check for collisions
 
 function draw() {
-
-
-
-// Draw Background
-
+  // Draw Background
   if (background) {
-      ctx.drawImage(backgroundImage, 0, 0);
+    ctx.drawImage(backgroundImage, 0, 0);
+  }
+
+  // Draw Max
+
+  if (maxDraw) {
+    ctx.font = "bold 48px Comic Sans MS";
+    ctx.fillStyle = "purple";
+    ctx.fillText(`Balls: ${max.ballScore}`, 40, 50);
+    ctx.fillText(`Bones: ${max.boneScore}`, 300, 50);
+
+    ctx.drawImage(maxImage, max.x, max.y, max.width, max.height);
+
+    // Draw the Bones and check for collisions
+
+    for (let i = 0; i < noOfBones; i++) {
+      bone[i].show();
+      bone[i].fall();
+
+      // Check for collisions of the balls and Max and increment Scores
+
+      dist = Math.sqrt(
+        (bone[i].x - max.x) * (bone[i].x - max.x) +
+          (bone[i].y - max.y) * (bone[i].y - max.y)
+      );
+
+      if (dist <= 50) {
+        max.boneScore += 1;
+        bone[i].x = Math.random() * (canvas.width - bone[i].width);
+        bone[i].y = canvas.height;
+      }
     }
 
+    // Draw the Balls and Check for collisions
 
-// Draw Max
+    for (let i = 0; i < noOfBalls; i++) {
+      ball[i].show();
+      ball[i].fall();
 
-    if (maxDraw) {
+      // Check for collisions of the balls and Max
 
-      ctx.font = 'bold 48px Comic Sans MS';
-      ctx.fillStyle = "purple";
-      ctx.fillText(`Balls: ${max.ballScore}`, 40, 50);
-      ctx.fillText(`Bones: ${max.boneScore}`, 300, 50);
+      dist = Math.sqrt(
+        (ball[i].x - max.x) * (ball[i].x - max.x) +
+          (ball[i].y - max.y) * (ball[i].y - max.y)
+      );
 
-
-
-
-
-      ctx.drawImage(maxImage, max.x, max.y, max.width, max.height);
-
-
-// Draw the Bones and check for collisions 
-
-      for (let i =0; i<noOfBones; i++){
-
-        bone[i].show();
-        bone[i].fall();
-
-
-// Check for collisions of the balls and Max and increment Scores     
-
-        dist = Math.sqrt((bone[i].x - max.x)*(bone[i].x - max.x) + (bone[i].y - max.y)*(bone[i].y - max.y));
-
-//console.log(dist)
-
-        if(dist <= 50) 
-        {  
-          
-          max.boneScore += 1
-          bone[i].x = Math.random() * (canvas.width - bone[i].width);
-          bone[i].y = canvas.height;
-
-
-          
-        }
-
-
+      if (dist <= 50) {
+        max.ballScore += 1;
+        ball[i].x = Math.random() * (canvas.width - ball[i].width);
+        ball[i].y = canvas.height;
       }
-
-
-// Draw the Balls and Check for collisions
-
-      for (let i= 0; i < noOfBalls; i++){
-
-        ball[i].show();
-        ball[i].fall();
-
- 
-// Check for collisions of the balls and Max         
-
-        dist = Math.sqrt((ball[i].x - max.x)*(ball[i].x - max.x) + (ball[i].y - max.y)*(ball[i].y - max.y));
-
-      //console.log(dist)
-
-        if(dist <= 50) 
-        {       
-
-          max.ballScore += 1
-          ball[i].x = Math.random() * (canvas.width - ball[i].width);
-          ball[i].y = canvas.height;
-                         
-        }
-
-        // console.log(`BALL Score, ${max.ballScore}` );
-        // console.log(`BONE Score, ${max.boneScore}` );    
-    
-
-
-      }
-
     }
-    
-
-    };  
-
-    
-
-// function timeoutRedirect() {
-
-//    location.replace = "./over.html";
-
-//}
-
-
-/*
-
-function gameover (){
-
-  // close window timeout 
-
-}
-*/
-
-
-
-function gameStart(){
-    keyStrokes(0.02);
-    draw();
-    requestAnimationFrame(gameStart);
-};
-
-gameStart(), 
-
-
-
-setInterval ( () => {
-
-for (let i = 0; i <= max.countdown; i++) 
-{
-
-max.countdown -= 1  
-//console.log(`${max.countdown}`)
-  
-if (max.countdown === 0)
-
-{
-  window.location.assign("../over.html");
-  
+  }
 }
 
+function gameStart() {
+  keyStrokes(0.02);
+  draw();
+  requestAnimationFrame(gameStart);
 }
 
-}, 1000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+gameStart(),
+  setInterval(() => {
+    window.location.assign("../over.html");
+  }, max.countdown);
