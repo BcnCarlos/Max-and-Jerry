@@ -30,7 +30,7 @@ let max = {
   height: 120,
   boneScore: 0,
   ballScore: 0,
-  countdown: 10000,
+  countdown: 60000,
 };
 
 // Keys movements for Max
@@ -222,5 +222,5 @@ function gameStart() {
 
 gameStart(),
   setInterval(() => {
-    window.location.assign("../over.html");
+    window.location.assign("/../over.html");
   }, max.countdown);
