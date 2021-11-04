@@ -1,33 +1,5 @@
 //Define the Canvas
 
-const canvas = document.getElementById("canvas2");
-const ctx = canvas.getContext("2d");
-
-canvas.width = 1024;
-canvas.height = 768;
-
-// prepare to draw background on load
-
-let background = false;
-let backgroundImage = new Image();
-backgroundImage.onload = function () {
-  background = true;
-};
-backgroundImage.src = "./pics/Barcelona-Tile.jpg";
-
-// prepare to draw Max on load
-
-let maxDraw = false;
-
-let maxImage = new Image();
-maxImage.src = "./pics/Max-head-round-96.png";
-
-maxImage.onload = function () {
-  maxDraw = true;
-};
-
-// Define Class Player
-
 class Player {
   constructor(speed, x, y, width, height, boneScore, ballScore, countdown) {
     this.speed = speed;
@@ -41,55 +13,104 @@ class Player {
   }
 }
 
-// Define Max as a player
+class Game {
+  constructor() {
+    this.canvas = document.getElementById("board");
 
-let max = new Player(400, 240, 380, 60, 120, 0, 0, 60000);
+    this.ctx = this.canvas.getContext("2d");
+    this.canvas.width = 1024;
+    this.canvas.height = 768;
 
-// Keystate, is it Up or Down?
-
-let keysDown = {};
-
-addEventListener(
-  "keydown",
-  function (key) {
-    keysDown[key.keyCode] = true;
-  },
-  false
-);
-
-addEventListener(
-  "keyup",
-  function (key) {
-    delete keysDown[key.keyCode];
-  },
-  false
-);
-
-// Keyboard Controls for Player Max
-
-function keyStrokes(modifier) {
-  if (38 in keysDown) {
-    max.y -= max.speed * modifier;
-    if (max.y < 0) {
-      max.y = 0;
-    }
+    this.max = new Player(400, 240, 380, 60, 120, 0, 0, 60000);
+    this.speedofKey = 0.02;
+    this.boneicon = new Image();
+    this.boneicon.src = "../pics/Bone.png";
+    this.noOfBones = 4;
+    this.bone = [];
+    this.ballicon = new Image();
+    this.ballicon.src = "../pics/tennis-ball.png";
+    this.noOfBalls = 8;
+    this.ball = [];
+    this.keysDown = {};
+    this.backgroundImage = new Image();
+    this.backgroundImage.src = "../pics/Barcelona-Tile.jpg";
+    this.maxImage = new Image();
+    this.maxImage.src = "../pics/Max-head-round-96.png";
   }
-  if (40 in keysDown) {
-    max.y += max.speed * modifier;
-    if (max.y >= 660) {
-      max.y = 660;
+
+  paly = () => {
+
+    this.keyStrokes();
+    this.draw();
+    
+    requestAnimationFrame(this.paly);
+
+    document.addEventListener(
+      "keydown",
+      function (key) {
+        this.keysDown[key.keyCode] = true;
+      },
+      false
+    );
+
+    document.addEventListener(
+      "keyup",
+      function (key) {
+        delete this.keysDown[key.keyCode];
+      },
+      false
+    );
+
+
+
+
+  };
+
+  
+
+    
+  
+
+  draw = () => {
+    this.ctx.drawImage(this.backgroundImage, 0, 0, 1024, 768);
+    this.ctx.drawImage(
+      this.maxImage,
+      this.max.x,
+      this.max.y,
+      this.max.width,
+      this.max.height
+    );
+
+    this.ctx.font = "bold 48px Comic Sans MS";
+    this.ctx.fillStyle = "purple";
+    this.ctx.fillText(`Balls: ${this.max.ballScore}`, 40, 50);
+    this.ctx.fillText(`Bones: ${this.max.boneScore}`, 300, 50);
+  };
+
+  keyStrokes = () => {
+    if (38 in this.keysDown) {
+      this.max.y -= this.max.speed * this.speedofKey;
+      if (this.max.y < 0) {
+        this.max.y = 0;
+      }
     }
-  }
-  if (37 in keysDown) {
-    max.x -= max.speed * modifier;
-    if (max.x <= 0) {
-      max.x = 0;
+    if (40 in this.keysDown) {
+      this.max.y += this.max.speed * this.speedofKey;
+      if (this.max.y >= 660) {
+        this.max.y = 660;
+      }
     }
-  }
-  if (39 in keysDown) {
-    max.x += max.speed * modifier;
-    if (max.x >= 960) {
-      max.x = 960;
+    if (37 in this.keysDown) {
+      this.max.x -= this.max.speed * this.speedofKey;
+      if (this.max.x <= 0) {
+        this.max.x = 0;
+      }
+    }
+    if (39 in this.keysDown) {
+      this.max.x += this.max.speed * this.speedofKey;
+      if (this.max.x >= 960) {
+        this.max.x = 960;
+      }
     }
   }
 }
@@ -107,33 +128,42 @@ class Bones {
   fall() {
     this.y = this.y + 1;
 
-    if (this.y > canvas.height) {
+    if (this.y > this.canvas.height) {
       this.y = 0;
     }
   }
 
   show() {
-    ctx.drawImage(boneicon, this.x, this.y, this.width, this.height);
+    this.ctx.drawImage(this.boneicon, this.x, this.y, this.width, this.height);
+
+    for (let i = 0; i < this.noOfBones; i++) {
+      let x = Math.floor(Math.random() * this.canvas.width);
+      let y = Math.floor(Math.random() * this.canvas.height);
+
+      this.bone[i] = new Bones(x, y);
+    }
+
+    for (let i = 0; i < this.noOfBones; i++) {
+      this.bone[i].show();
+      this.bone[i].fall();
+
+      // Check for collisions of the bones and Max  using the Pythagorean Theorem and increment Scores
+
+      dist = Math.sqrt(
+        (this.bone[i].x - this.max.x) * (this.bone[i].x - this.max.x) +
+          (this.bone[i].y - this.max.y) * (this.bone[i].y - this.max.y)
+      );
+
+      if (dist <= 50) {
+        this.max.boneScore += 1;
+
+        this.bone[i].x =
+          Math.random() * (this.canvas.width - this.bone[i].width);
+        this.bone[i].y = this.canvas.height;
+      }
+    }
   }
 }
-
-// Define bones objects
-
-let boneicon = new Image();
-boneicon.src = "./pics/Bone.png";
-
-let noOfBones = 4;
-
-let bone = [];
-
-for (let i = 0; i < noOfBones; i++) {
-  let x = Math.floor(Math.random() * canvas.width);
-  let y = Math.floor(Math.random() * canvas.height);
-
-  bone[i] = new Bones(x, y);
-}
-
-// Create Class TennisBalls and its methods
 
 class TennisBalls {
   constructor(x, y) {
@@ -152,96 +182,38 @@ class TennisBalls {
   }
 
   show() {
-    ctx.drawImage(ballicon, this.x, this.y, this.width, this.height);
-  }
-}
+    ctx.drawImage(this.ballicon, this.x, this.y, this.width, this.height);
 
-// Define ball objects
+    for (let i = 0; i < this.noOfBalls; i++) {
+      let x = Math.floor(Math.random() * this.canvas.width);
+      let y = Math.floor(Math.random() * this.canvas.height);
 
-let ballicon = new Image();
-ballicon.src = "./pics/tennis-ball.png";
-
-let noOfBalls = 8;
-
-let ball = [];
-
-for (let i = 0; i < noOfBalls; i++) {
-  let x = Math.floor(Math.random() * canvas.width);
-  let y = Math.floor(Math.random() * canvas.height);
-
-  ball[i] = new TennisBalls(x, y);
-}
-
-// Draw the game and check for collisions
-
-function draw() {
-  // Draw Background
-  if (background) {
-    ctx.drawImage(backgroundImage, 0, 0);
-  }
-
-  // Draw Max
-
-  if (maxDraw) {
-    ctx.font = "bold 48px Comic Sans MS";
-    ctx.fillStyle = "purple";
-    ctx.fillText(`Balls: ${max.ballScore}`, 40, 50);
-    ctx.fillText(`Bones: ${max.boneScore}`, 300, 50);
-
-    ctx.drawImage(maxImage, max.x, max.y, max.width, max.height);
-
-    // Draw the Bones and check for collisions
-
-    for (let i = 0; i < noOfBones; i++) {
-      bone[i].show();
-      bone[i].fall();
-
-      // Check for collisions of the bones and Max  using the Pythagorean Theorem and increment Scores
-
-      dist = Math.sqrt(
-        (bone[i].x - max.x) * (bone[i].x - max.x) +
-          (bone[i].y - max.y) * (bone[i].y - max.y)
-      );
-
-      if (dist <= 50) {
-        max.boneScore += 1;
-
-        bone[i].x = Math.random() * (canvas.width - bone[i].width);
-        bone[i].y = canvas.height;
-      }
+      this.ball[i] = new TennisBalls(x, y);
     }
 
-    // Draw the Balls and Check for collisions
-
-    for (let i = 0; i < noOfBalls; i++) {
-      ball[i].show();
-      ball[i].fall();
+    for (let i = 0; i < this.noOfBalls; i++) {
+      this.ball[i].show();
+      this.ball[i].fall();
 
       // Check for collisions of the balls and Max  using the Pythagorean Theorem and increment Scores
 
       dist = Math.sqrt(
-        (ball[i].x - max.x) * (ball[i].x - max.x) +
-          (ball[i].y - max.y) * (ball[i].y - max.y)
+        (this.ball[i].x - this.max.x) * (this.ball[i].x - this.max.x) +
+          (this.ball[i].y - this.max.y) * (this.ball[i].y - this.max.y)
       );
 
       if (dist <= 50) {
-        max.ballScore += 1;
-        let audio = new Audio("./pics/Dog_Bark_Sound_Effect.mp3");
+        this.max.ballScore += 1;
+        let audio = new Audio("../pics/Dog_Bark_Sound_Effect.mp3");
         audio.play();
-        ball[i].x = Math.random() * (canvas.width - ball[i].width);
-        ball[i].y = canvas.height;
+        this.ball[i].x =
+          Math.random() * (this.canvas.width - this.ball[i].width);
+        this.ball[i].y = this.canvas.height;
       }
     }
   }
 }
 
-function gameStart() {
-  keyStrokes(0.02);
-  draw();
-  requestAnimationFrame(gameStart);
-}
-
-gameStart(),
-  setInterval(() => {
-    window.location.assign("./over.html");
-  }, max.countdown);
+setInterval(() => {
+  window.location.assign("./over.html");
+}, 600000);
