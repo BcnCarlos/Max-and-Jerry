@@ -1,3 +1,4 @@
+//Define the Canvas
 
 const canvas = document.getElementById("canvas2");
 const ctx = canvas.getContext("2d");
@@ -5,7 +6,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = 1024;
 canvas.height = 768;
 
-// prepare to draw background 
+// prepare to draw background on load
 
 let background = false;
 let backgroundImage = new Image();
@@ -14,41 +15,39 @@ backgroundImage.onload = function () {
 };
 backgroundImage.src = "./pics/Barcelona-Tile.jpg";
 
-// prepare to draw Max
+// prepare to draw Max on load
 
 let maxDraw = false;
 
 let maxImage = new Image();
 maxImage.src = "./pics/Max-head-round-96.png";
 
-
 maxImage.onload = function () {
   maxDraw = true;
 };
 
+// Define Class Player
 
 class Player {
-
-constructor(speed, x, y, width, height, boneScore, ballScore, countdown ){
-  this.speed = speed
-  this.x = x
-  this.y = y
-  this.width = width
-  this.height = height
-  this.boneScore = boneScore
-  this.ballScore = ballScore
-  this.countdown =  countdown
-} 
+  constructor(speed, x, y, width, height, boneScore, ballScore, countdown) {
+    this.speed = speed;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.boneScore = boneScore;
+    this.ballScore = ballScore;
+    this.countdown = countdown;
+  }
 }
 
+// Define Max as a player
 
-let max = new Player (400, 240, 380, 60, 120, 0, 0, 60000)
-  
+let max = new Player(400, 240, 380, 60, 120, 0, 0, 60000);
 
+// Keystate, is it Up or Down?
 
-// Keys Down or Up
-
-let keysDown = { };
+let keysDown = {};
 
 addEventListener(
   "keydown",
@@ -95,42 +94,35 @@ function keyStrokes(modifier) {
   }
 }
 
-
-
-// Let the Bones fall!
+// Create Class Bones and its methods
 
 class Bones {
-
-  constructor (x, y) {
-
-  this.x = x;
-  this.y = y;
-  this.width = 108;
-  this.height = 108;
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.width = 108;
+    this.height = 108;
   }
 
   fall() {
-
     this.y = this.y + 1;
 
     if (this.y > canvas.height) {
       this.y = 0;
     }
-  };
+  }
 
   show() {
     ctx.drawImage(boneicon, this.x, this.y, this.width, this.height);
-  };
+  }
 }
 
-// Create bones objects
+// Define bones objects
 
 let boneicon = new Image();
 boneicon.src = "./pics/Bone.png";
 
 let noOfBones = 4;
-
-
 
 let bone = [];
 
@@ -141,20 +133,15 @@ for (let i = 0; i < noOfBones; i++) {
   bone[i] = new Bones(x, y);
 }
 
-
-
-
-// What to do with the tennis balls
+// Create Class TennisBalls and its methods
 
 class TennisBalls {
-
-  constructor (x, y ){
-  this.x = x;
-  this.y = y;
-  this.width = 108;
-  this.height = 108;
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.width = 108;
+    this.height = 108;
   }
-
 
   fall() {
     this.y = this.y + 1;
@@ -162,14 +149,14 @@ class TennisBalls {
     if (this.y > canvas.height) {
       this.y = 0;
     }
-  };
+  }
 
   show() {
     ctx.drawImage(ballicon, this.x, this.y, this.width, this.height);
-  };
+  }
 }
 
-// Create ball objects
+// Define ball objects
 
 let ballicon = new Image();
 ballicon.src = "./pics/tennis-ball.png";
@@ -185,11 +172,9 @@ for (let i = 0; i < noOfBalls; i++) {
   ball[i] = new TennisBalls(x, y);
 }
 
-
 // Draw the game and check for collisions
 
 function draw() {
-  
   // Draw Background
   if (background) {
     ctx.drawImage(backgroundImage, 0, 0);
@@ -211,7 +196,7 @@ function draw() {
       bone[i].show();
       bone[i].fall();
 
-      // Check for collisions of the balls and Max and increment Scores
+      // Check for collisions of the bones and Max  using the Pythagorean Theorem and increment Scores
 
       dist = Math.sqrt(
         (bone[i].x - max.x) * (bone[i].x - max.x) +
@@ -220,7 +205,7 @@ function draw() {
 
       if (dist <= 50) {
         max.boneScore += 1;
-        
+
         bone[i].x = Math.random() * (canvas.width - bone[i].width);
         bone[i].y = canvas.height;
       }
@@ -232,7 +217,7 @@ function draw() {
       ball[i].show();
       ball[i].fall();
 
-      // Check for collisions of the balls and Max
+      // Check for collisions of the balls and Max  using the Pythagorean Theorem and increment Scores
 
       dist = Math.sqrt(
         (ball[i].x - max.x) * (ball[i].x - max.x) +
@@ -241,7 +226,7 @@ function draw() {
 
       if (dist <= 50) {
         max.ballScore += 1;
-        let audio = new Audio("./pics/Dog_Bark_Sound_Effect.mp3")
+        let audio = new Audio("./pics/Dog_Bark_Sound_Effect.mp3");
         audio.play();
         ball[i].x = Math.random() * (canvas.width - ball[i].width);
         ball[i].y = canvas.height;
@@ -257,10 +242,12 @@ function gameStart() {
 }
 
 gameStart(),
-
-
   setInterval(() => {
+    /*
     window.location.assign(
       "https://bcncarlos.github.io/Max-and-Jerry-/over.html"
     );
+*/
+
+    window.location.assign("/over.html");
   }, max.countdown);
