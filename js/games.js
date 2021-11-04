@@ -249,5 +249,5 @@ gameStart(),
     );
 */
 
-    window.location.assign("/over.html");
+    window.location.assign("../over.html");
   }, max.countdown);
