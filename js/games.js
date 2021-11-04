@@ -243,11 +243,5 @@ function gameStart() {
 
 gameStart(),
   setInterval(() => {
-    /*
-    window.location.assign(
-      "https://bcncarlos.github.io/Max-and-Jerry-/over.html"
-    );
-*/
-
     window.location.assign("./over.html");
   }, max.countdown);
